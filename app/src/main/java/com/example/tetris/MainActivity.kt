@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         val preferences = AppPreferences(this)
         preferences.resetHighScore()
         Snackbar.make(view, "Score was reset", Snackbar.LENGTH_SHORT).show()
-        tvHighScore?.text = "High score ${preferences.getHighScore()}"
+        tvHighScore?.text = "High score: ${preferences.getHighScore()}"
     }
 
     private fun onClickBtnExit(view: View) {
