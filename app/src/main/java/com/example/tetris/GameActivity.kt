@@ -32,11 +32,11 @@ class GameActivity : AppCompatActivity() {
         Toast.makeText(this, "Game is restarting...", Toast.LENGTH_SHORT).show()
     }
 
-    private fun updateCurrentScore() {
-        tvCurrentScore?.text = "0"
+    fun updateCurrentScore(score: Int = 0) {
+        tvCurrentScore?.text = score as String
     }
 
-    private fun updateHighScore() {
+    fun updateHighScore() {
         tvHighScore?.text = preferences?.getHighScore().toString()
     }
 }
