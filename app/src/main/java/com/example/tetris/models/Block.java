@@ -37,7 +37,7 @@ public class Block {
         return this.color.rgbValue;
     }
 
-    public int getColorRGB(byte value) {
+    public static int getColorRGB(byte value) {
         for (BlockColor color : BlockColor.values()) {
             if (color.byteValue == value) {
                 return color.rgbValue;
