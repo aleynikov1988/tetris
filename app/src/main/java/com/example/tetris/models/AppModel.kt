@@ -9,7 +9,8 @@ import com.example.tetris.storage.AppPreferences
 class AppModel {
     var score: Int = 0;
     private var preferences: AppPreferences? = null
-    var currentBlock: Block? = null;
+    var currentBlock: Block? = null
+    var nextBlock: Block? = null
     var currentState: String = Statuses.AWAITING_START.name
     private var field: Array<ByteArray>
             = array2dOfByte(Constants.ROW_COUNT.value, Constants.COLUMN_COUNT.value)
@@ -25,7 +26,7 @@ class AppModel {
     fun startGame() {
         if (!isGameActive()) {
             currentState = Statuses.ACTIVE.name
-            generateNextBlock()
+            generateCurrentBlock()
         }
     }
 
@@ -70,7 +71,7 @@ class AppModel {
             resetField()
 
             var frameNumber: Int? = currentBlock?.frameNumber
-            var coordinate: Point? = Point()
+            val coordinate: Point? = Point()
 
             coordinate?.x = currentBlock?.position?.x
             coordinate?.y = currentBlock?.position?.y
@@ -89,7 +90,7 @@ class AppModel {
                     frameNumber = frameNumber?.plus(1)
 
                     if (frameNumber != null) {
-                        if (frameNumber >= currentBlock?.frameNumber as Int) {
+                        if (frameNumber >= currentBlock?.frameCount as Int) {
                             frameNumber = 0
                         }
                     }
@@ -97,34 +98,33 @@ class AppModel {
             }
 
             if (!moveValidation(coordinate as Point, frameNumber)) {
-                fixPositionBlock(currentBlock?.position as Point, currentBlock?.frameNumber as Int)
+                moveBlock(currentBlock?.position as Point, currentBlock?.frameNumber as Int)
 
                 if (Motions.DOWN.name == action) {
-                    boostScore()
                     persistCellData()
                     assessField()
-                    generateNextBlock()
+                    generateCurrentBlock()
 
                     if (!possibleNextBlock()) {
                         currentBlock = null
                         currentState = Statuses.OVER.name
-                        resetField()
+                        resetField(false)
                     }
                 }
             } else {
                 if (frameNumber != null) {
-                    fixPositionBlock(coordinate, frameNumber)
+                    moveBlock(coordinate, frameNumber)
                     currentBlock?.setState(frameNumber, coordinate)
                 }
             }
         }
     }
 
-    private fun resetField() {
+    private fun resetField(ephemeralCellOnly: Boolean = true) {
         for (i in 0 until Constants.ROW_COUNT.value) {
             (0 until Constants.COLUMN_COUNT.value)
                 .filter {
-                    field[i][it] == CellConstants.EPHEMERAL.value
+                    !ephemeralCellOnly || field[i][it] == CellConstants.EPHEMERAL.value
                 }
                 .forEach {
                     field[i][it] = CellConstants.EMPTY.value
@@ -136,7 +136,7 @@ class AppModel {
         for (row in 0 until field.size) {
             var emptyCells = 0
             for (col in 0 until field[row].size) {
-                var status = getCellStatus(row, col)
+                val status = getCellStatus(row, col)
 
                 if (CellConstants.EMPTY.value == status) {
                     emptyCells++
@@ -144,20 +144,21 @@ class AppModel {
 
                 if (emptyCells == 0) {
                     shiftRows(row)
+                    boostScore()
                 }
             }
         }
     }
 
-    private fun fixPositionBlock(position: Point, frameNumber: Int) {
+    private fun moveBlock(position: Point, frameNumber: Int) {
         synchronized(field) {
-            var shape: Array<ByteArray>? = currentBlock?.getShape(frameNumber)
+            val shape: Array<ByteArray>? = currentBlock?.getShape(frameNumber)
 
             if (shape != null) {
                 for (i in shape.indices) {
                     for (j in 0 until shape[i].size) {
-                        var x = position.x + i
-                        var y = position.y + j
+                        val x = position.x + j
+                        val y = position.y + i
 
                         if (CellConstants.EMPTY.value != shape[i][j]) {
                             field[y][x] = shape[i][j]
@@ -171,7 +172,7 @@ class AppModel {
     private fun shiftRows(n: Int) {
         if (n > 0) {
             for (row in n - 1 downTo 0) {
-                for (col2 in 0 until field[0].size) {
+                for (col2 in 0 until field[row].size) {
                     setCellStatus(row + 1, col2, getCellStatus(row, col2))
                 }
             }
@@ -184,7 +185,7 @@ class AppModel {
 
     private fun persistCellData() {
         for (row in 0 until field.size) {
-            for (col in 0 until field[0].size) {
+            for (col in 0 until field[row].size) {
                 var status = getCellStatus(row, col)
 
                 if (status == CellConstants.EPHEMERAL.value) {
@@ -193,6 +194,19 @@ class AppModel {
                 }
             }
         }
+    }
+
+    private fun generateNextBlock() {
+        nextBlock = Block.createBlock()
+    }
+
+    private fun generateCurrentBlock() {
+        currentBlock = if (nextBlock != null) {
+            nextBlock
+        } else {
+            Block.createBlock()
+        }
+        generateNextBlock()
     }
 
     private fun possibleNextBlock(): Boolean {
@@ -206,11 +220,7 @@ class AppModel {
         }
     }
 
-    private fun generateNextBlock() {
-        currentBlock = Block.createBlock()
-    }
-
-    private fun canShapeMoving(position: Point, shape: Array<ByteArray>): Boolean {
+    private fun canMoving(position: Point, shape: Array<ByteArray>): Boolean {
         return if (position.y < 0 || position.x < 0) {
             false
         } else if (position.y + shape.size > Constants.ROW_COUNT.value) {
@@ -219,11 +229,11 @@ class AppModel {
             false
         } else {
             for (i in 0 until shape.size) {
-                for (j in 0 until shape[0].size) {
+                for (j in 0 until shape[i].size) {
                     val x = position.x + j
                     val y = position.y + i
 
-                    if (CellConstants.EMPTY.value != shape[i][j] && CellConstants.EMPTY.value != field[i][j]) {
+                    if (CellConstants.EMPTY.value != shape[i][j] && CellConstants.EMPTY.value != field[y][x]) {
                         return false
                     }
                 }
@@ -234,7 +244,7 @@ class AppModel {
 
     private fun moveValidation(position: Point, frameNumber: Int?): Boolean {
         val shape: Array<ByteArray>? = currentBlock?.getShape(frameNumber as Int)
-        return canShapeMoving(position, shape as Array<ByteArray>)
+        return canMoving(position, shape as Array<ByteArray>)
     }
 
     private fun resetModel() {

@@ -2,9 +2,15 @@
     <string name="app_name">Tetris</string>
     <string name="tv_high_score">High score: 0</string>
     <string name="btn_new_game">New game</string>
-    <string name="btn_reset_score">Reset score</string>
+    <string name="btn_continue">Continue</string>
     <string name="btn_exit">Exit</string>
     <string name="btn_restart">Restart</string>
-    <string name="tv_label_current_score">current score</string>
-    <string name="tv_label_high_score">high score</string>
+    <string name="tv_label_current_score">Score</string>
+    <string name="tv_label_high_score">Hi-score</string>
+    <string name="tv_label_next">Next block</string>
+    <string name="tv_default_score_value">0</string>
+    <string name="btn_motion_left">Left</string>
+    <string name="btn_motion_down">Down</string>
+    <string name="btn_motion_right">Right</string>
+    <string name="btn_motion_rotation">Rotation</string>
 </resources>
