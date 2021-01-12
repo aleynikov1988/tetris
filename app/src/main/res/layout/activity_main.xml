@@ -40,17 +40,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_continue"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:textColor="@color/colorPrimaryDark"
+                style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_new_game"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_new_game"/>
+                android:text="@string/btn_new_game"
+                android:textColor="@color/colorPrimaryDark"
+                style="?android:attr/buttonBarButtonStyle"/>
             <Button
                 android:id="@+id/btn_exit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_exit"/>
+                android:text="@string/btn_exit"
+                android:textColor="@color/colorPrimaryDark"
+                style="?android:attr/buttonBarButtonStyle"/>
+            <info.androidhive.fontawesome.FontTextView
+                android:id="@+id/sound_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fa_volume_up_solid"
+                android:textColor="@color/colorPrimaryDark"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textSize="24sp"
+                app:solid_icon="true"/>
+            <info.androidhive.fontawesome.FontTextView
+                android:id="@+id/sound_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fa_volume_mute_solid"
+                android:textColor="@color/colorPrimaryDark"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textSize="24sp"
+                app:solid_icon="true"
+                android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

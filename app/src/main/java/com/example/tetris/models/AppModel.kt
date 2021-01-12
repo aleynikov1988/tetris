@@ -5,6 +5,7 @@ import com.example.tetris.constants.CellConstants
 import com.example.tetris.constants.FieldConstants as Constants
 import com.example.tetris.helpers.array2dOfByte
 import com.example.tetris.storage.AppPreferences
+import com.example.tetris.views.NextBlockView
 
 class AppModel {
     var score: Int = 0;
@@ -14,6 +15,7 @@ class AppModel {
     var currentState: String = Statuses.AWAITING_START.name
     private var field: Array<ByteArray>
             = array2dOfByte(Constants.ROW_COUNT.value, Constants.COLUMN_COUNT.value)
+    private var nextBlockView: NextBlockView? = null
 
     enum class Statuses {
         AWAITING_START, ACTIVE, INACTIVE, OVER
@@ -38,6 +40,10 @@ class AppModel {
     fun restartGame() {
         resetModel()
         startGame()
+    }
+
+    fun setNextBlockView(view: NextBlockView) {
+        nextBlockView = view
     }
 
     fun setPreferences(preferences: AppPreferences) {
@@ -198,6 +204,7 @@ class AppModel {
 
     private fun generateNextBlock() {
         nextBlock = Block.createBlock()
+        nextBlockView?.setBlock(nextBlock as Block)
     }
 
     private fun generateCurrentBlock() {

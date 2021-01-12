@@ -58,7 +58,7 @@ public class Block {
         this.shapeIndex = shapeIndex;
         this.frameNumber = 0;
         this.color = color;
-        this.position = new Point(FieldConstants.COLUMN_COUNT.getValue()/2, 0);
+        this.position = new Point(FieldConstants.COLUMN_COUNT.getValue() / 2, 0);
     }
 
     public static Block createBlock() {

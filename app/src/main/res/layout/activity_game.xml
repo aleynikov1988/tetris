@@ -16,8 +16,10 @@
             android:layout_height="0dp"
             android:layout_weight="9"
             android:weightSum="10"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
             <LinearLayout
+                android:id="@+id/layout_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
@@ -29,19 +31,18 @@
                     android:layout_height="match_parent"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/layout_info"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp">
+                android:gravity="bottom"
+                android:paddingBottom="52dp">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="end"
-                    android:padding="12dp">
+                    android:gravity="end">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -74,8 +75,8 @@
                         android:textStyle="bold"/>
                     <com.example.tetris.views.NextBlockView
                         android:id="@+id/view_next_block"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -115,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:text="@string/btn_motion_rotation"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
                 style="?android:attr/buttonBarButtonStyle"/>
         </LinearLayout>
     </LinearLayout>

@@ -1,11 +1,14 @@
 package com.example.tetris.activities
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.tetris.R
 import com.example.tetris.models.AppModel
@@ -32,13 +35,12 @@ class GameActivity : AppCompatActivity() {
         tvCurrentScore = findViewById<TextView>(R.id.tv_current_score)
         tvHighScore = findViewById<TextView>(R.id.tv_high_score)
         tetrisView = findViewById<TetrisView>(R.id.view_tetris)
+        nextBlockView = findViewById<NextBlockView>(R.id.view_next_block)
 
         tetrisView.setActivity(this)
         tetrisView.setModel(appModel)
         tetrisView.setOnTouchListener(this::onTetrisViewTouch)
-
-        nextBlockView = findViewById<NextBlockView>(R.id.view_next_block)
-        nextBlockView.setModel(appModel)
+        appModel.setNextBlockView(nextBlockView)
 
         val btnMotionLeft = findViewById<Button>(R.id.btn_motion_left)
         val btnMotionDown = findViewById<Button>(R.id.btn_motion_down)
@@ -94,6 +96,41 @@ class GameActivity : AppCompatActivity() {
             R.id.btn_motion_right -> moveTetramino(AppModel.Motions.RIGHT)
             R.id.btn_motion_rotation -> moveTetramino(AppModel.Motions.ROTATION)
         }
+
+        val rectf = Rect()
+        val rectf2 = Rect()
+        val rectf3 = Rect()
+
+        val fieldLayout = findViewById<LinearLayout>(R.id.layout_field)
+        val infoLayout = findViewById<LinearLayout>(R.id.layout_info)
+
+        tetrisView.getLocalVisibleRect(rectf)
+        fieldLayout.getLocalVisibleRect(rectf2)
+        infoLayout.getLocalVisibleRect(rectf2)
+
+
+
+//        var location = intArrayOf(0, 1)
+//        tetrisView.getLocationOnScreen(location)
+//
+        Log.d("tetrisView", "x: ${rectf.left}")
+        Log.d("tetrisView", "y: ${rectf.top}")
+        Log.d("tetrisView", "w: ${rectf.width()}")
+        Log.d("tetrisView", "h: ${rectf.height()}")
+
+        Log.d("fieldLayout", "x: ${rectf2.left}")
+        Log.d("fieldLayout", "y: ${rectf2.top}")
+        Log.d("fieldLayout", "w: ${rectf2.width()}")
+        Log.d("fieldLayout", "h: ${rectf2.height()}")
+
+        Log.d("infoLayout", "x: ${rectf3.left}")
+        Log.d("infoLayout", "y: ${rectf3.top}")
+        Log.d("infoLayout", "w: ${rectf3.width()}")
+        Log.d("infoLayout", "h: ${rectf3.height()}")
+
+
+//        val infoLayout = findViewById<LinearLayout>(R.id.layout_info)
+//        infoLayout.setPadding(0, location[1], 0, 0)
     }
 
     fun updateCurrentScore(score: Int = 0) {

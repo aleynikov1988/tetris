@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.tetris.activities.GameActivity
@@ -31,7 +32,38 @@ class TetrisView : View {
     companion object {
         private val DELAY = 500
         private val BLOCK_OFFSET = 2
-        private val FRAME_OFFSET_BASE = 10
+        private val FRAME_OFFSET_BASE = 0
+    }
+
+    fun setModel(model: AppModel) {
+        this.model = model
+    }
+
+    fun setActivity(activity: GameActivity) {
+        this.activity = activity
+    }
+
+    fun setGameCommand(cmd: AppModel.Motions) {
+        if (model != null && model?.currentState == AppModel.Statuses.ACTIVE.name) {
+            if (cmd == AppModel.Motions.DOWN) {
+                model?.generateField(cmd.name)
+                invalidate() // -> onDraw()
+                return
+            }
+            setGameCommandWithDelay(cmd)
+        }
+    }
+
+    fun setGameCommandWithDelay(cmd: AppModel.Motions) {
+        val now = System.currentTimeMillis()
+
+        if (now - lastMove > DELAY) {
+            model?.generateField(cmd.name)
+            invalidate() // -> onDraw()
+            lastMove = now
+        }
+        updateScores()
+        viewHandler.sleep(DELAY.toLong())
     }
 
     private class ViewHandler(private val owner: TetrisView) : Handler() {
@@ -84,40 +116,12 @@ class TetrisView : View {
         }
     }
 
-    fun setModel(model: AppModel) {
-        this.model = model
-    }
-
-    fun setActivity(activity: GameActivity) {
-        this.activity = activity
-    }
-
-    fun setGameCommand(cmd: AppModel.Motions) {
-        if (model != null && model?.currentState == AppModel.Statuses.ACTIVE.name) {
-            if (cmd == AppModel.Motions.DOWN) {
-                model?.generateField(cmd.name)
-                invalidate() // -> onDraw()
-                return
-            }
-            setGameCommandWithDelay(cmd)
-        }
-    }
-
-    fun setGameCommandWithDelay(cmd: AppModel.Motions) {
-        val now = System.currentTimeMillis()
-
-        if (now - lastMove > DELAY) {
-            model?.generateField(cmd.name)
-            invalidate() // -> onDraw()
-            lastMove = now
-        }
-        updateScores()
-        viewHandler.sleep(DELAY.toLong())
-    }
-
     private fun drawFrame(canvas: Canvas) {
         val offsetW = frameOffset.width.toFloat()
         val offsetH = frameOffset.height.toFloat()
+
+//        Log.d("frameOffset", "w: ${offsetW}")
+//        Log.d("frameOffset", "h: ${offsetH}")
 
         paint.color = Color.BLACK
         canvas.drawRect(offsetW, offsetH, width - offsetW, height - offsetH, paint)
