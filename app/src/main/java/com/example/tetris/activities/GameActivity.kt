@@ -11,7 +11,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.tetris.R
-import com.example.tetris.models.AppModel
+import com.example.tetris.models.Tetris
 import com.example.tetris.storage.AppPreferences
 import com.example.tetris.views.NextBlockView
 import com.example.tetris.views.TetrisView
@@ -23,24 +23,24 @@ class GameActivity : AppCompatActivity() {
 
     private lateinit var tetrisView: TetrisView
     private lateinit var nextBlockView: NextBlockView
-    private val appModel: AppModel = AppModel()
+    private val tetrisModel: Tetris = Tetris()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         preferences = AppPreferences(this)
-        appModel.setPreferences(preferences as AppPreferences)
+        tetrisModel.setPreferences(preferences as AppPreferences)
 
         tvCurrentScore = findViewById<TextView>(R.id.tv_current_score)
         tvHighScore = findViewById<TextView>(R.id.tv_high_score)
         tetrisView = findViewById<TetrisView>(R.id.view_tetris)
         nextBlockView = findViewById<NextBlockView>(R.id.view_next_block)
 
-        tetrisView.setActivity(this)
-        tetrisView.setModel(appModel)
+        tetrisView.setGameActivity(this)
+        tetrisView.setTetrisModel(tetrisModel)
         tetrisView.setOnTouchListener(this::onTetrisViewTouch)
-        appModel.setNextBlockView(nextBlockView)
+        tetrisModel.setNextBlockView(nextBlockView)
 
         val btnMotionLeft = findViewById<Button>(R.id.btn_motion_left)
         val btnMotionDown = findViewById<Button>(R.id.btn_motion_down)
@@ -57,16 +57,16 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun onTetrisViewTouch(view: View, event: MotionEvent): Boolean {
-        if (appModel.isGameOver() || appModel.isGameAwaitingStart()) {
-            appModel.startGame()
-            tetrisView.setGameCommandWithDelay(AppModel.Motions.DOWN)
+        if (tetrisModel.isGameOver() || tetrisModel.isGameAwaitingStart()) {
+            tetrisModel.startGame()
+            tetrisView.setGameCommandWithDelay(Tetris.Motions.DOWN)
         }
-        else if (appModel.isGameActive()) {
+        else if (tetrisModel.isGameActive()) {
             when (resolveTouchDirection(view, event)) {
-                0 -> moveTetramino(AppModel.Motions.LEFT)
-                1 -> moveTetramino(AppModel.Motions.ROTATION)
-                2 -> moveTetramino(AppModel.Motions.DOWN)
-                3 -> moveTetramino(AppModel.Motions.RIGHT)
+                0 -> moveTetramino(Tetris.Motions.LEFT)
+                1 -> moveTetramino(Tetris.Motions.ROTATION)
+                2 -> moveTetramino(Tetris.Motions.DOWN)
+                3 -> moveTetramino(Tetris.Motions.RIGHT)
             }
         }
         return true
@@ -83,18 +83,18 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun moveTetramino(motion: AppModel.Motions) {
-        if (appModel.isGameActive()) {
+    private fun moveTetramino(motion: Tetris.Motions) {
+        if (tetrisModel.isGameActive()) {
             tetrisView.setGameCommand(motion)
         }
     }
 
     private fun onClickBtnMotion(view: View) {
         when (view.id) {
-            R.id.btn_motion_left -> moveTetramino(AppModel.Motions.LEFT)
-            R.id.btn_motion_down -> moveTetramino(AppModel.Motions.DOWN)
-            R.id.btn_motion_right -> moveTetramino(AppModel.Motions.RIGHT)
-            R.id.btn_motion_rotation -> moveTetramino(AppModel.Motions.ROTATION)
+            R.id.btn_motion_left -> moveTetramino(Tetris.Motions.LEFT)
+            R.id.btn_motion_down -> moveTetramino(Tetris.Motions.DOWN)
+            R.id.btn_motion_right -> moveTetramino(Tetris.Motions.RIGHT)
+            R.id.btn_motion_rotation -> moveTetramino(Tetris.Motions.ROTATION)
         }
 
         val rectf = Rect()

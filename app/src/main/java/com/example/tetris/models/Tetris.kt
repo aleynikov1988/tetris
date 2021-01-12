@@ -2,19 +2,19 @@ package com.example.tetris.models
 
 import android.graphics.Point
 import com.example.tetris.constants.CellConstants
-import com.example.tetris.constants.FieldConstants as Constants
+import com.example.tetris.constants.FieldConstants
 import com.example.tetris.helpers.array2dOfByte
 import com.example.tetris.storage.AppPreferences
 import com.example.tetris.views.NextBlockView
 
-class AppModel {
+class Tetris {
     var score: Int = 0;
     private var preferences: AppPreferences? = null
     var currentBlock: Block? = null
     var nextBlock: Block? = null
     var currentState: String = Statuses.AWAITING_START.name
     private var field: Array<ByteArray>
-            = array2dOfByte(Constants.ROW_COUNT.value, Constants.COLUMN_COUNT.value)
+            = array2dOfByte(FieldConstants.ROW_COUNT.value, FieldConstants.COLUMN_COUNT.value)
     private var nextBlockView: NextBlockView? = null
 
     enum class Statuses {
@@ -127,8 +127,8 @@ class AppModel {
     }
 
     private fun resetField(ephemeralCellOnly: Boolean = true) {
-        for (i in 0 until Constants.ROW_COUNT.value) {
-            (0 until Constants.COLUMN_COUNT.value)
+        for (i in 0 until FieldConstants.ROW_COUNT.value) {
+            (0 until FieldConstants.COLUMN_COUNT.value)
                 .filter {
                     !ephemeralCellOnly || field[i][it] == CellConstants.EPHEMERAL.value
                 }
@@ -230,9 +230,9 @@ class AppModel {
     private fun canMoving(position: Point, shape: Array<ByteArray>): Boolean {
         return if (position.y < 0 || position.x < 0) {
             false
-        } else if (position.y + shape.size > Constants.ROW_COUNT.value) {
+        } else if (position.y + shape.size > FieldConstants.ROW_COUNT.value) {
             false
-        } else if (position.x + shape[0].size > Constants.COLUMN_COUNT.value) {
+        } else if (position.x + shape[0].size > FieldConstants.COLUMN_COUNT.value) {
             false
         } else {
             for (i in 0 until shape.size) {

@@ -7,7 +7,6 @@ import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         preferences = AppPreferences(this)
         tvHighScore = findViewById(R.id.tv_high_score)
-        tvHighScore?.text = "High score: ${preferences?.getHighScore()}"
+        tvHighScore?.text = "${preferences?.getHighScore()}"
 
         val btnNewGame = findViewById<Button>(R.id.btn_new_game)
         val btnContinue = findViewById<Button>(R.id.btn_continue)
@@ -83,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onClickBtnNewGame(view: View) {
         preferences?.resetHighScore()
-        tvHighScore?.text = "High score: ${preferences?.getHighScore()}"
+        tvHighScore?.text = "${preferences?.getHighScore()}"
 
         start()
     }

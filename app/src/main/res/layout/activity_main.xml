@@ -15,24 +15,51 @@
         android:layout_marginTop="@dimen/layout_margin_top"
         android:layout_marginBottom="@dimen/layout_margin_buttom"
         android:orientation="vertical"
-        android:gravity="center">
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="80sp"/>
-        <TextView
-            android:id="@+id/tv_high_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_high_score"
-            android:textSize="20sp"
-            android:layout_marginTop="@dimen/layout_margin_top"/>
+        android:weightSum="3">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:weightSum="3"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textSize="80sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_high_score"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="@dimen/layout_margin_top"/>
+                <TextView
+                    android:id="@+id/tv_high_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_default_score_value"
+                    android:textSize="20sp"
+                    android:layout_marginTop="@dimen/layout_margin_top"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:orientation="vertical"
             android:gravity="center">
             <Button

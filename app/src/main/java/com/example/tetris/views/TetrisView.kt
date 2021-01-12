@@ -8,20 +8,19 @@ import android.graphics.RectF
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.tetris.activities.GameActivity
 import com.example.tetris.constants.CellConstants
 import com.example.tetris.constants.FieldConstants
-import com.example.tetris.models.AppModel
 import com.example.tetris.models.Block
+import com.example.tetris.models.Tetris
 
 class TetrisView : View {
     private var paint = Paint()
     private var lastMove: Long = 0
-    private var model: AppModel? = null
-    private var activity: GameActivity? = null
+    private var tetris: Tetris? = null
+    private var game: GameActivity? = null
     private var viewHandler: ViewHandler = ViewHandler(this)
     private var cellSize: Dimension = Dimension(0, 0)
     private var frameOffset: Dimension = Dimension(0, 0)
@@ -35,18 +34,18 @@ class TetrisView : View {
         private val FRAME_OFFSET_BASE = 0
     }
 
-    fun setModel(model: AppModel) {
-        this.model = model
+    fun setTetrisModel(model: Tetris) {
+        tetris = model
     }
 
-    fun setActivity(activity: GameActivity) {
-        this.activity = activity
+    fun setGameActivity(activity: GameActivity) {
+        game = activity
     }
 
-    fun setGameCommand(cmd: AppModel.Motions) {
-        if (model != null && model?.currentState == AppModel.Statuses.ACTIVE.name) {
-            if (cmd == AppModel.Motions.DOWN) {
-                model?.generateField(cmd.name)
+    fun setGameCommand(cmd: Tetris.Motions) {
+        if (tetris != null && tetris?.currentState == Tetris.Statuses.ACTIVE.name) {
+            if (cmd == Tetris.Motions.DOWN) {
+                tetris?.generateField(cmd.name)
                 invalidate() // -> onDraw()
                 return
             }
@@ -54,11 +53,11 @@ class TetrisView : View {
         }
     }
 
-    fun setGameCommandWithDelay(cmd: AppModel.Motions) {
+    fun setGameCommandWithDelay(cmd: Tetris.Motions) {
         val now = System.currentTimeMillis()
 
         if (now - lastMove > DELAY) {
-            model?.generateField(cmd.name)
+            tetris?.generateField(cmd.name)
             invalidate() // -> onDraw()
             lastMove = now
         }
@@ -69,13 +68,13 @@ class TetrisView : View {
     private class ViewHandler(private val owner: TetrisView) : Handler() {
         override fun handleMessage(msg: Message) {
             if (msg.what == 0) {
-                if (owner.model != null) {
-                    if (owner.model!!.isGameActive()) {
-                        owner.setGameCommandWithDelay(AppModel.Motions.DOWN)
+                if (owner.tetris != null) {
+                    if (owner.tetris!!.isGameActive()) {
+                        owner.setGameCommandWithDelay(Tetris.Motions.DOWN)
                     }
-                    if (owner.model!!.isGameOver()) {
-                        owner.model?.endGame()
-                        Toast.makeText(owner.activity, "Game is over", Toast.LENGTH_LONG).show()
+                    if (owner.tetris!!.isGameOver()) {
+                        owner.tetris?.endGame()
+                        Toast.makeText(owner.game, "Game is over", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -107,7 +106,7 @@ class TetrisView : View {
         super.onDraw(canvas)
         drawFrame(canvas)
 
-        if (model != null) {
+        if (tetris != null) {
             for (row in 0 until FieldConstants.ROW_COUNT.value) {
                 for (col in 0 until FieldConstants.COLUMN_COUNT.value) {
                     drawCell(canvas, row, col)
@@ -120,19 +119,16 @@ class TetrisView : View {
         val offsetW = frameOffset.width.toFloat()
         val offsetH = frameOffset.height.toFloat()
 
-//        Log.d("frameOffset", "w: ${offsetW}")
-//        Log.d("frameOffset", "h: ${offsetH}")
-
         paint.color = Color.BLACK
         canvas.drawRect(offsetW, offsetH, width - offsetW, height - offsetH, paint)
     }
 
     private fun drawCell(canvas: Canvas, row: Int, col: Int) {
-        val status = model?.getCellStatus(row, col)
+        val status = tetris?.getCellStatus(row, col)
 
         if (CellConstants.EMPTY.value != status) {
             val rgbValue = if (CellConstants.EPHEMERAL.value == status) {
-                model?.currentBlock?.colorRGB
+                tetris?.currentBlock?.colorRGB
             } else {
                 Block.getColorRGB(status as Byte)
             }
@@ -152,7 +148,7 @@ class TetrisView : View {
     }
 
     private fun updateScores() {
-        activity?.updateCurrentScore(model?.score as Int)
-        activity?.updateHighScore()
+        game?.updateCurrentScore(tetris?.score as Int)
+        game?.updateHighScore()
     }
 }
