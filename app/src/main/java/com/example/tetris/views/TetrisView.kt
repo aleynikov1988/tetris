@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.tetris.activities.GameActivity
@@ -24,6 +25,13 @@ class TetrisView : View {
     private var viewHandler: ViewHandler = ViewHandler(this)
     private var cellSize: Dimension = Dimension(0, 0)
     private var frameOffset: Dimension = Dimension(0, 0)
+    private val textPaint = Paint().apply {
+        isAntiAlias = true
+        color = Color.CYAN
+        style = Paint.Style.FILL
+        textAlign = Paint.Align.CENTER
+        textSize = 36f
+    }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
@@ -44,12 +52,8 @@ class TetrisView : View {
 
     fun setGameCommand(cmd: Tetris.Motions) {
         if (tetris != null && tetris?.currentState == Tetris.Statuses.ACTIVE.name) {
-            if (cmd == Tetris.Motions.DOWN) {
-                tetris?.generateField(cmd.name)
-                invalidate() // -> onDraw()
-                return
-            }
-            setGameCommandWithDelay(cmd)
+            tetris?.generateField(cmd.name)
+            invalidate() // -> onDraw()
         }
     }
 
@@ -106,6 +110,17 @@ class TetrisView : View {
         super.onDraw(canvas)
         drawFrame(canvas)
 
+        val xPos = (canvas.width / 2).toFloat()
+        val yPos = (canvas.height / 2 - (textPaint.descent() + textPaint.ascent()) / 2)
+
+        if (tetris?.isGameAwaitingStart() as Boolean) {
+            canvas.drawText("Tap to start".toUpperCase(), xPos, yPos, textPaint)
+        }
+
+        if (tetris?.isGameOver() as Boolean) {
+            canvas.drawText("Game is over".toUpperCase(), xPos, yPos, textPaint)
+        }
+
         if (tetris != null) {
             for (row in 0 until FieldConstants.ROW_COUNT.value) {
                 for (col in 0 until FieldConstants.COLUMN_COUNT.value) {
@@ -145,6 +160,11 @@ class TetrisView : View {
 
         paint.color = rgbValue
         canvas.drawRoundRect(rectf, 5F, 5F, paint)
+
+        val rectf2 = RectF(l + 5, t + 5, r - 5, b - 5)
+        paint.color = Color.GRAY
+
+        canvas.drawRoundRect(rectf2, 5F, 5F, paint)
     }
 
     private fun updateScores() {

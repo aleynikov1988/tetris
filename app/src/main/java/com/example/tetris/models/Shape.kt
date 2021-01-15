@@ -3,14 +3,14 @@ package com.example.tetris.models
 import java.lang.IllegalArgumentException
 
 enum class Shape(val frameCount: Int, val startPosition: Int) {
-    TetraminoO(1, 1) {
+    O(1, 1) {
         override fun getFrame(frameNumber: Int): Frame {
             return Frame(1)
                 .addRow("11")
                 .addRow("11")
         }
     },
-    TetraminoI(2, 2) {
+    I(2, 2) {
         override fun getFrame(frameNumber: Int): Frame {
             return when (frameNumber) {
                 0 -> Frame(4)
@@ -24,7 +24,7 @@ enum class Shape(val frameCount: Int, val startPosition: Int) {
             }
         }
     },
-    TetraminoT(4, 1) {
+    T(4, 2) {
         override fun getFrame(frameNumber: Int): Frame {
             return when (frameNumber) {
                 0 -> Frame(3)
@@ -45,7 +45,7 @@ enum class Shape(val frameCount: Int, val startPosition: Int) {
             }
         }
     },
-    TetraminoL(4, 1) {
+    L(4, 2) {
         override fun getFrame(frameNumber: Int): Frame {
             return when (frameNumber) {
                 0 -> Frame(3)
@@ -66,7 +66,7 @@ enum class Shape(val frameCount: Int, val startPosition: Int) {
             }
         }
     },
-    TetraminoJ(4, 1) {
+    J(4, 2) {
         override fun getFrame(frameNumber: Int): Frame {
             return when (frameNumber) {
                 0 -> Frame(3)
@@ -87,7 +87,7 @@ enum class Shape(val frameCount: Int, val startPosition: Int) {
             }
         }
     },
-    TetraminoS(2, 1) {
+    S(2, 2) {
         override fun getFrame(frameNumber: Int): Frame {
             return when (frameNumber) {
                 0 -> Frame(3)
@@ -101,7 +101,7 @@ enum class Shape(val frameCount: Int, val startPosition: Int) {
             }
         }
     },
-    TetraminoZ(2, 1) {
+    Z(2, 2) {
         override fun getFrame(frameNumber: Int): Frame {
             return when (frameNumber) {
                 0 -> Frame(3)

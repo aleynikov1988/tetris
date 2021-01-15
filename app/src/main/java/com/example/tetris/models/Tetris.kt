@@ -1,6 +1,7 @@
 package com.example.tetris.models
 
 import android.graphics.Point
+import android.util.Log
 import com.example.tetris.constants.CellConstants
 import com.example.tetris.constants.FieldConstants
 import com.example.tetris.helpers.array2dOfByte
@@ -35,6 +36,7 @@ class Tetris {
     fun endGame() {
         score = 0
         currentState = Statuses.OVER.name
+        nextBlockView?.setBlock(null)
     }
 
     fun restartGame() {
@@ -50,14 +52,14 @@ class Tetris {
         this.preferences = preferences
     }
 
+    fun getCellStatus(row: Int, col: Int): Byte? {
+        return field[row][col]
+    }
+
     fun setCellStatus(row: Int, col: Int, status: Byte?) {
         if (status != null) {
             field[row][col] = status
         }
-    }
-
-    fun getCellStatus(row: Int, col: Int): Byte? {
-        return field[row][col]
     }
 
     fun isGameAwaitingStart(): Boolean {
@@ -139,19 +141,19 @@ class Tetris {
     }
 
     private fun assessField() {
-        for (row in 0 until field.size) {
+        for (i in field.indices) {
             var emptyCells = 0
-            for (col in 0 until field[row].size) {
-                val status = getCellStatus(row, col)
+            for (j in field[i].indices) {
+                val status = getCellStatus(i, j)
 
                 if (CellConstants.EMPTY.value == status) {
                     emptyCells++
                 }
+            }
 
-                if (emptyCells == 0) {
-                    shiftRows(row)
-                    boostScore()
-                }
+            if (emptyCells == 0) {
+                shiftRows(i)
+                boostScore()
             }
         }
     }
@@ -162,7 +164,7 @@ class Tetris {
 
             if (shape != null) {
                 for (i in shape.indices) {
-                    for (j in 0 until shape[i].size) {
+                    for (j in shape[i].indices) {
                         val x = position.x + j
                         val y = position.y + i
 
@@ -177,15 +179,15 @@ class Tetris {
 
     private fun shiftRows(n: Int) {
         if (n > 0) {
-            for (row in n - 1 downTo 0) {
-                for (col2 in 0 until field[row].size) {
-                    setCellStatus(row + 1, col2, getCellStatus(row, col2))
+            for (i in n - 1 downTo 0) {
+                for (j in field[i].indices) {
+                    setCellStatus(i + 1, j, getCellStatus(i, j))
                 }
             }
         }
 
-        for (col in 0 until field[0].size) {
-            setCellStatus(0, col, CellConstants.EMPTY.value)
+        for (j in field[0].indices) {
+            setCellStatus(0, j, CellConstants.EMPTY.value)
         }
     }
 

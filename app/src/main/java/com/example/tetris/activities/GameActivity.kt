@@ -97,36 +97,36 @@ class GameActivity : AppCompatActivity() {
             R.id.btn_motion_rotation -> moveTetramino(Tetris.Motions.ROTATION)
         }
 
-        val rectf = Rect()
-        val rectf2 = Rect()
-        val rectf3 = Rect()
-
-        val fieldLayout = findViewById<LinearLayout>(R.id.layout_field)
-        val infoLayout = findViewById<LinearLayout>(R.id.layout_info)
-
-        tetrisView.getLocalVisibleRect(rectf)
-        fieldLayout.getLocalVisibleRect(rectf2)
-        infoLayout.getLocalVisibleRect(rectf2)
-
-
-
-//        var location = intArrayOf(0, 1)
-//        tetrisView.getLocationOnScreen(location)
+//        val rectf = Rect()
+//        val rectf2 = Rect()
+//        val rectf3 = Rect()
 //
-        Log.d("tetrisView", "x: ${rectf.left}")
-        Log.d("tetrisView", "y: ${rectf.top}")
-        Log.d("tetrisView", "w: ${rectf.width()}")
-        Log.d("tetrisView", "h: ${rectf.height()}")
-
-        Log.d("fieldLayout", "x: ${rectf2.left}")
-        Log.d("fieldLayout", "y: ${rectf2.top}")
-        Log.d("fieldLayout", "w: ${rectf2.width()}")
-        Log.d("fieldLayout", "h: ${rectf2.height()}")
-
-        Log.d("infoLayout", "x: ${rectf3.left}")
-        Log.d("infoLayout", "y: ${rectf3.top}")
-        Log.d("infoLayout", "w: ${rectf3.width()}")
-        Log.d("infoLayout", "h: ${rectf3.height()}")
+//        val fieldLayout = findViewById<LinearLayout>(R.id.layout_field)
+//        val infoLayout = findViewById<LinearLayout>(R.id.layout_info)
+//
+//        tetrisView.getLocalVisibleRect(rectf)
+//        fieldLayout.getLocalVisibleRect(rectf2)
+//        infoLayout.getLocalVisibleRect(rectf2)
+//
+//
+//
+////        var location = intArrayOf(0, 1)
+////        tetrisView.getLocationOnScreen(location)
+////
+//        Log.d("tetrisView", "x: ${rectf.left}")
+//        Log.d("tetrisView", "y: ${rectf.top}")
+//        Log.d("tetrisView", "w: ${rectf.width()}")
+//        Log.d("tetrisView", "h: ${rectf.height()}")
+//
+//        Log.d("fieldLayout", "x: ${rectf2.left}")
+//        Log.d("fieldLayout", "y: ${rectf2.top}")
+//        Log.d("fieldLayout", "w: ${rectf2.width()}")
+//        Log.d("fieldLayout", "h: ${rectf2.height()}")
+//
+//        Log.d("infoLayout", "x: ${rectf3.left}")
+//        Log.d("infoLayout", "y: ${rectf3.top}")
+//        Log.d("infoLayout", "w: ${rectf3.width()}")
+//        Log.d("infoLayout", "h: ${rectf3.height()}")
 
 
 //        val infoLayout = findViewById<LinearLayout>(R.id.layout_info)

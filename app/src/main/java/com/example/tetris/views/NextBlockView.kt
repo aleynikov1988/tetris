@@ -8,8 +8,10 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
+import com.example.tetris.constants.CellConstants
+import com.example.tetris.helpers.array2dOfByte
 import com.example.tetris.models.Block
-import com.example.tetris.models.Shape
 
 class NextBlockView : View {
     private var paint = Paint()
@@ -20,9 +22,16 @@ class NextBlockView : View {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
+    companion object {
+        private const val BLOCK_OFFSET = 2
+        private const val FRAME_OFFSET_BASE = 2
+        private const val ROW_COUNT = 4
+        private const val COLUMN_COUNT = 4
+    }
+
     private data class Dimension(val width: Int, val height: Int)
 
-    fun setBlock(block: Block) {
+    fun setBlock(block: Block?) {
         this.block = block
         invalidate() // ->onDraw()
     }
@@ -30,14 +39,15 @@ class NextBlockView : View {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        val cellW = (w - 2 * 15) / 4
-        val cellH = (h - 2 * 15) / 4
+        val cellW = (((w - 2 * FRAME_OFFSET_BASE) / COLUMN_COUNT) / 1.4).toInt()
+        val cellH = (((h - 2 * FRAME_OFFSET_BASE) / ROW_COUNT) / 1.4).toInt()
         val n = Math.min(cellW, cellH)
 
         cellSize = Dimension(n, n)
 
-        val offsetX = (w - 4 * n) / 2
-        val offsetY = (h - 4 * n) / 2
+        val offsetX = (w - COLUMN_COUNT * n)
+        val offsetY = 0
+
         frameOffset = Dimension(offsetX, offsetY)
     }
 
@@ -46,33 +56,50 @@ class NextBlockView : View {
         drawFrame(canvas)
 
         if (block != null) {
+            val field: Array<ByteArray> = array2dOfByte(ROW_COUNT, COLUMN_COUNT)
             val shape: Array<ByteArray>? = block?.getShape(block?.frameNumber as Int)
 
             if (shape != null) {
-                for (row in shape.indices) {
-                    for (col in 0 until shape[row].size) {
-                        Log.d("NextBlockView", "DRAW CELL row:${row} col:${col}")
-                        drawCell(canvas, row, col)
+                for (i in shape.indices) {
+                    for (j in 0 until shape[i].size) {
+                        field[j][i] = shape[i][j]
+                    }
+                }
+            }
+
+            for (i in field.indices) {
+                for (j in 0 until field[i].size) {
+                    if (field[i][j] == CellConstants.EPHEMERAL.value) {
+                        drawCell(canvas, i, j)
                     }
                 }
             }
         }
-
     }
 
     private fun drawFrame(canvas: Canvas) {
+        val offsetW = frameOffset.width.toFloat()
+        val offsetH = frameOffset.height.toFloat()
+
         paint.color = Color.LTGRAY
-        canvas.drawRect(.0F, .0F, (cellSize.width * 4).toFloat(), (cellSize.height * 4).toFloat(), paint)
+        canvas.drawRect(offsetW, offsetH, width.toFloat(), width - offsetW, paint)
+
+
     }
 
-    private fun drawCell(canvas: Canvas, row: Int, col: Int) {
-        val left = (frameOffset.height + col * cellSize.height).toFloat()
-        val top = (frameOffset.width + row * cellSize.width).toFloat()
-        val right = (frameOffset.height + (col + 1) * cellSize.height).toFloat()
-        val bottom = (frameOffset.width + (row + 1) * cellSize.width).toFloat()
-        val rectf = RectF(left, top, right, bottom)
+    private fun drawCell(canvas: Canvas, x: Int, y: Int) {
+        val t = (frameOffset.height + y * cellSize.height + BLOCK_OFFSET).toFloat()
+        val l = (frameOffset.width + x * cellSize.width + BLOCK_OFFSET).toFloat()
+        val b = (frameOffset.height + (y + 1) * cellSize.height + BLOCK_OFFSET).toFloat()
+        val r = (frameOffset.width + (x + 1) * cellSize.width + BLOCK_OFFSET).toFloat()
+        val rectf = RectF(l, t, r, b)
 
-        paint.color = Color.BLACK
+        paint.color = block?.colorRGB as Int
         canvas.drawRoundRect(rectf, 5F, 5F, paint)
+
+        val rectf2 = RectF(l + 5, t + 5, r - 5, b - 5)
+        paint.color = Color.GRAY
+
+        canvas.drawRoundRect(rectf2, 5F, 5F, paint)
     }
 }
