@@ -20,6 +20,7 @@ class GameActivity : AppCompatActivity() {
     var preferences: AppPreferences? = null
     var tvCurrentScore: TextView? = null
     var tvHighScore: TextView? = null
+    var tvLines: TextView? = null
 
     private lateinit var tetrisView: TetrisView
     private lateinit var nextBlockView: NextBlockView
@@ -34,6 +35,7 @@ class GameActivity : AppCompatActivity() {
 
         tvCurrentScore = findViewById<TextView>(R.id.tv_current_score)
         tvHighScore = findViewById<TextView>(R.id.tv_high_score)
+        tvLines = findViewById<TextView>(R.id.tv_lines)
         tetrisView = findViewById<TetrisView>(R.id.view_tetris)
         nextBlockView = findViewById<NextBlockView>(R.id.view_next_block)
 
@@ -54,6 +56,7 @@ class GameActivity : AppCompatActivity() {
 
         updateCurrentScore()
         updateHighScore()
+        updateLines()
     }
 
     private fun onTetrisViewTouch(view: View, event: MotionEvent): Boolean {
@@ -96,41 +99,10 @@ class GameActivity : AppCompatActivity() {
             R.id.btn_motion_right -> moveTetramino(Tetris.Motions.RIGHT)
             R.id.btn_motion_rotation -> moveTetramino(Tetris.Motions.ROTATION)
         }
+    }
 
-//        val rectf = Rect()
-//        val rectf2 = Rect()
-//        val rectf3 = Rect()
-//
-//        val fieldLayout = findViewById<LinearLayout>(R.id.layout_field)
-//        val infoLayout = findViewById<LinearLayout>(R.id.layout_info)
-//
-//        tetrisView.getLocalVisibleRect(rectf)
-//        fieldLayout.getLocalVisibleRect(rectf2)
-//        infoLayout.getLocalVisibleRect(rectf2)
-//
-//
-//
-////        var location = intArrayOf(0, 1)
-////        tetrisView.getLocationOnScreen(location)
-////
-//        Log.d("tetrisView", "x: ${rectf.left}")
-//        Log.d("tetrisView", "y: ${rectf.top}")
-//        Log.d("tetrisView", "w: ${rectf.width()}")
-//        Log.d("tetrisView", "h: ${rectf.height()}")
-//
-//        Log.d("fieldLayout", "x: ${rectf2.left}")
-//        Log.d("fieldLayout", "y: ${rectf2.top}")
-//        Log.d("fieldLayout", "w: ${rectf2.width()}")
-//        Log.d("fieldLayout", "h: ${rectf2.height()}")
-//
-//        Log.d("infoLayout", "x: ${rectf3.left}")
-//        Log.d("infoLayout", "y: ${rectf3.top}")
-//        Log.d("infoLayout", "w: ${rectf3.width()}")
-//        Log.d("infoLayout", "h: ${rectf3.height()}")
-
-
-//        val infoLayout = findViewById<LinearLayout>(R.id.layout_info)
-//        infoLayout.setPadding(0, location[1], 0, 0)
+    fun updateLines(lines: Int = 0) {
+        tvLines?.text = lines.toString()
     }
 
     fun updateCurrentScore(score: Int = 0) {

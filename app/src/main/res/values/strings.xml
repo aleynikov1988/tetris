@@ -13,4 +13,5 @@
     <string name="btn_motion_down">Down</string>
     <string name="btn_motion_right">Right</string>
     <string name="btn_motion_rotation">Rotation</string>
+    <string name="tv_label_lines">Lines</string>
 </resources>

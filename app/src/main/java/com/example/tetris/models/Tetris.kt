@@ -9,7 +9,8 @@ import com.example.tetris.storage.AppPreferences
 import com.example.tetris.views.NextBlockView
 
 class Tetris {
-    var score: Int = 0;
+    var score: Int = 0
+    var lines: Int = 0
     private var preferences: AppPreferences? = null
     var currentBlock: Block? = null
     var nextBlock: Block? = null
@@ -35,6 +36,7 @@ class Tetris {
 
     fun endGame() {
         score = 0
+        lines = 0
         currentState = Statuses.OVER.name
         nextBlockView?.setBlock(null)
     }
@@ -154,6 +156,7 @@ class Tetris {
             if (emptyCells == 0) {
                 shiftRows(i)
                 boostScore()
+                incrementLines()
             }
         }
     }
@@ -229,6 +232,10 @@ class Tetris {
         }
     }
 
+    private fun incrementLines() {
+        lines += 1
+    }
+
     private fun canMoving(position: Point, shape: Array<ByteArray>): Boolean {
         return if (position.y < 0 || position.x < 0) {
             false
@@ -258,6 +265,7 @@ class Tetris {
 
     private fun resetModel() {
         score = 0
+        lines = 0
         currentState = Statuses.AWAITING_START.name
         resetField()
     }

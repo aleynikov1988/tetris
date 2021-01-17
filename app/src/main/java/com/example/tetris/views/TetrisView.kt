@@ -8,9 +8,10 @@ import android.graphics.RectF
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
+import com.example.tetris.R
 import com.example.tetris.activities.GameActivity
 import com.example.tetris.constants.CellConstants
 import com.example.tetris.constants.FieldConstants
@@ -65,7 +66,10 @@ class TetrisView : View {
             invalidate() // -> onDraw()
             lastMove = now
         }
+
         updateScores()
+        updateLines()
+
         viewHandler.sleep(DELAY.toLong())
     }
 
@@ -104,6 +108,9 @@ class TetrisView : View {
         val offsetX = (w - FieldConstants.COLUMN_COUNT.value * n) / 2
         val offsetY = (h - FieldConstants.ROW_COUNT.value * n) / 2
         frameOffset = Dimension(offsetX, offsetY)
+
+        val gameLayout = game?.findViewById<LinearLayout>(R.id.layout_info)
+        gameLayout?.setPadding(0,frameOffset.height, 0, frameOffset.height)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -170,5 +177,9 @@ class TetrisView : View {
     private fun updateScores() {
         game?.updateCurrentScore(tetris?.score as Int)
         game?.updateHighScore()
+    }
+
+    private fun updateLines() {
+        game?.updateLines(tetris?.lines as Int)
     }
 }

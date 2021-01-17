@@ -6,12 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".activities.GameActivity">
     <LinearLayout
+        android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="10"
         android:background="#e8e8e8">
         <LinearLayout
+            android:id="@+id/layout_game"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="9"
@@ -19,68 +21,86 @@
             android:orientation="horizontal"
             android:padding="5dp">
             <LinearLayout
-                android:id="@+id/layout_field"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:orientation="vertical"
-                android:gravity="center">
-                <com.example.tetris.views.TetrisView
-                    android:id="@+id/view_tetris"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/layout_info"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:orientation="vertical"
-                android:gravity="bottom"
-                android:paddingBottom="52dp">
+                android:id="@+id/layout_game_wrap"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/layout_field"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="7"
                     android:orientation="vertical"
-                    android:gravity="end">
-                    <TextView
+                    android:gravity="center">
+                    <com.example.tetris.views.TetrisView
+                        android:id="@+id/view_tetris"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layout_info"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:gravity="bottom"
+                    android:paddingBottom="52dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/tv_label_current_score"
-                        android:textAllCaps="true"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tv_current_score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tv_default_score_value"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/layout_margin_top"
-                        android:text="@string/tv_label_high_score"
-                        android:textAllCaps="true"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tv_high_score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tv_default_score_value"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tv_label_next"
-                        android:layout_marginTop="@dimen/layout_margin_top"
-                        android:textAllCaps="true"
-                        android:textStyle="bold"/>
-                    <com.example.tetris.views.NextBlockView
-                        android:id="@+id/view_next_block"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:orientation="vertical"
+                        android:gravity="end">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_label_current_score"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/tv_current_score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_default_score_value"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/layout_margin_top"
+                            android:text="@string/tv_label_high_score"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/tv_high_score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_default_score_value"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_label_lines"
+                            android:layout_marginTop="@dimen/layout_margin_top"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/tv_lines"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_default_score_value"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_label_next"
+                            android:layout_marginTop="@dimen/layout_margin_top"
+                            android:textAllCaps="true"
+                            android:textStyle="bold"/>
+                        <com.example.tetris.views.NextBlockView
+                            android:id="@+id/view_next_block"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_nav"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
