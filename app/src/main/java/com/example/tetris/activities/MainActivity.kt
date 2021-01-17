@@ -45,10 +45,12 @@ class MainActivity : AppCompatActivity() {
 
         val btnNewGame = findViewById<Button>(R.id.btn_new_game)
         val btnContinue = findViewById<Button>(R.id.btn_continue)
+        val btnStatistics = findViewById<Button>(R.id.btn_statistics)
         val btnExit = findViewById<Button>(R.id.btn_exit)
 
         btnNewGame.setOnClickListener(this::onClickBtnNewGame)
         btnContinue.setOnClickListener(this::onClickBtnContinue)
+        btnStatistics.setOnClickListener(this::onClickBtnStatistics)
         btnExit.setOnClickListener(this::onClickBtnExit)
 
         if (preferences?.getHighScore() != 0) {
@@ -73,6 +75,11 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         unbindService(connection)
         ssBound = false
+    }
+
+    private fun onClickBtnStatistics(view: View) {
+        val intent = Intent(this, StatisticsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun start() {

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 
 class AppPreferences(ctx: Context) {
-    var data: SharedPreferences = ctx.getSharedPreferences("app", Context.MODE_PRIVATE)
+    var data: SharedPreferences = ctx.getSharedPreferences("tetris", Context.MODE_PRIVATE)
 
     fun saveHighScore(score: Int) {
         data.edit().putInt("high_score", score).apply()
