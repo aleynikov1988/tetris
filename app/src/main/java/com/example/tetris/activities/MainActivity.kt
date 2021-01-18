@@ -66,15 +66,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        Intent(this, BackgroundSoundService::class.java).also { intent ->
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        if (preferences?.isSoundEnabled() as Boolean) {
+            Intent(this, BackgroundSoundService::class.java).also { intent ->
+                bindService(intent, connection, Context.BIND_AUTO_CREATE)
+            }
         }
     }
 
     override fun onStop() {
         super.onStop()
-        unbindService(connection)
-        ssBound = false
+        if (preferences?.isSoundEnabled() as Boolean) {
+            unbindService(connection)
+            ssBound = false
+        }
     }
 
     private fun onClickBtnStatistics(view: View) {
@@ -106,10 +110,12 @@ class MainActivity : AppCompatActivity() {
         when (view.id) {
             R.id.sound_on -> {
                 findViewById<FontTextView>(R.id.sound_off).visibility = View.VISIBLE
+                preferences?.setSoundMode(false)
                 if (ssBound) soundService.setVolume(0f)
             }
             R.id.sound_off -> {
                 findViewById<FontTextView>(R.id.sound_on).visibility = View.VISIBLE
+                preferences?.setSoundMode(true)
                 if (ssBound) soundService.setVolume(0.5f)
             }
         }

@@ -17,4 +17,12 @@ class AppPreferences(ctx: Context) {
     fun resetHighScore() {
         data.edit().putInt("high_score", 0).apply()
     }
+
+    fun isSoundEnabled(): Boolean {
+        return data.getBoolean("sound_status", true)
+    }
+
+    fun setSoundMode(enabled: Boolean) {
+        data.edit().putBoolean("sound_status", enabled).apply()
+    }
 }
